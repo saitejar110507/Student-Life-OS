@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Life OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        
+        .sidebar-item:hover .sidebar-icon {
+            transform: translateX(3px);
+        }
+        
+        .sidebar-icon {
+            transition: transform 0.2s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-hover {
+            transition: all 0.2s ease;
+        }
+        
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s ease;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .tab-active {
+            position: relative;
+        }
+        
+        .tab-active:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #0ea5e9;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex">
+    <!-- Sidebar -->
+    <div class="w-64 bg-white dark:bg-gray-800 shadow-md flex-shrink-0 hidden md:flex flex-col">
+        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h1 class="text-xl font-bold text-primary-600 dark:text-primary-400 flex items-center">
+                <i class="fas fa-brain mr-2"></i>
+                Student Life OS
+            </h1>
+        </div>
+        <div class="flex-1 overflow-y-auto">
+            <!-- Core Productivity -->
+            <div class="px-4 py-2">
+                <h3 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Core Productivity</h3>
+                <ul>
+                    <li class="sidebar-item mb-1">
+                        <a href="#tasks" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-tasks sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item mb-1">
+                        <a href="#projects" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-project-diagram sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item mb-1">
+                        <a href="#habits" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-redo sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Habits</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Personal Management -->
+            <div class="px-4 py-2">
+                <h3 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Personal Management</h3>
+                <ul>
+                    <li class="sidebar-item mb-1">
+                        <a href="#journal" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-book sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Journal</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item mb-1">
+                        <a href="#goals" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-bullseye sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Goals</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item mb-1">
+                        <a href="#reviews" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-clipboard-check sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Reviews</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Academic System -->
+            <div class="px-4 py-2">
+                <h3 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Academic System</h3>
+                <ul>
+                    <li class="sidebar-item mb-1">
+                        <a href="#subjects" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-book-open sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Subjects</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item mb-1">
+                        <a href="#assignments" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-tasks sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Assignments</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item mb-1">
+                        <a href="#exams" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-graduation-cap sidebar-icon mr-3 text-primary-500"></i>
+                            <span>Exams</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- More sections can be added here -->
+        </div>
+        <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center text-white">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">Student</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">View Profile</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile sidebar toggle -->
+    <div class="fixed bottom-4 right-4 z-50 md:hidden">
+        <button id="mobile-menu-button" class="w-12 h-12 rounded-full bg-primary-500 text-white shadow-lg flex items-center justify-center">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </div>
+    
+    <!-- Mobile sidebar -->
+    <div id="mobile-sidebar" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden">
+        <div class="absolute left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 -translate-x-full">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <h1 class="text-xl font-bold text-primary-600 dark:text-primary-400 flex items-center">
+                    <i class="fas fa-brain mr-2"></i>
+                    Student Life OS
+                </h1>
+                <button id="close-mobile-menu" class="text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto h-full">
+                <!-- Same sidebar content as desktop -->
+                <!-- Core Productivity -->
+                <div class="px-4 py-2">
+                    <h3 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Core Productivity</h3>
+                    <ul>
+                        <li class="sidebar-item mb-1">
+                            <a href="#tasks" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-tasks sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Tasks</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item mb-1">
+                            <a href="#projects" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-project-diagram sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Projects</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item mb-1">
+                            <a href="#habits" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-redo sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Habits</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Personal Management -->
+                <div class="px-4 py-2">
+                    <h3 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Personal Management</h3>
+                    <ul>
+                        <li class="sidebar-item mb-1">
+                            <a href="#journal" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-book sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Journal</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item mb-1">
+                            <a href="#goals" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-bullseye sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Goals</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item mb-1">
+                            <a href="#reviews" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-clipboard-check sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Reviews</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Academic System -->
+                <div class="px-4 py-2">
+                    <h3 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Academic System</h3>
+                    <ul>
+                        <li class="sidebar-item mb-1">
+                            <a href="#subjects" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-book-open sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Subjects</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item mb-1">
+                            <a href="#assignments" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-tasks sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Assignments</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item mb-1">
+                            <a href="#exams" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-graduation-cap sidebar-icon mr-3 text-primary-500"></i>
+                                <span>Exams</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm z-10">
+            <div class="px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="mr-4 text-gray-500 dark:text-gray-400 md:hidden">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 class="text-lg font-semibold">Dashboard</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button id="theme-toggle" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:inline"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <main class="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+            <!-- Dashboard Overview -->
+            <div class="mb-8 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-4">Welcome back, Student!</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Tasks Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 card-hover animate-fade-in delay-100">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-sm font-medium">Pending Tasks</h3>
+                                <p class="text-2xl font-bold mt-1">12</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                                <i class="fas fa-tasks text-primary-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#tasks" class="text-primary-500 text-sm font-medium hover:underline">View all tasks</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Assignments Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 card-hover animate-fade-in delay-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-sm font-medium">Upcoming Assignments</h3>
+                                <p class="text-2xl font-bold mt-1">5</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                                <i class="fas fa-book text-green-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#assignments" class="text-primary-500 text-sm font-medium hover:underline">View assignments</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Habits Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 card-hover animate-fade-in delay-300">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-sm font-medium">Habit Streak</h3>
+                                <p class="text-2xl font-bold mt-1">7 days</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                                <i class="fas fa-fire text-purple-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#habits" class="text-primary-500 text-sm font-medium hover:underline">Track habits</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Exams Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 card-hover animate-fade-in">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-gray-500 dark:text-gray-400 text-sm font-medium">Next Exam</h3>
+                                <p class="text-2xl font-bold mt-1">3 days</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center">
+                                <i class="fas fa-graduation-cap text-yellow-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#exams" class="text-primary-500 text-sm font-medium hover:underline">View schedule</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tasks Section -->
+            <div id="tasks" class="mb-8 animate-fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold">Tasks</h2>
+                    <button class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        <i class="fas fa-plus mr-1"></i> New Task
+                    </button>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                    <div class="border-b border-gray-200 dark:border-gray-700">
+                        <nav class="flex -mb-px">
+                            <button class="tab-active py-4 px-6 text-sm font-medium text-primary-500 border-b-2 border-primary-500">
+                                Today
+                            </button>
+                            <button class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                                Upcoming
+                            </button>
+                            <button class="py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                                High Priority
+                            </button>
+                        </nav>
+                    </div>
+                    
+                    <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                        <!-- Task Item -->
+                        <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input type="checkbox" class="h-4 w-4 text-primary-500 rounded focus:ring-primary-500 border-gray-300 dark:border-gray-600">
+                                </div>
+                                <div class="ml-3 flex-1">
+                                    <p class="text-sm font-medium">Complete Math assignment</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Due today • Math 101</p>
+                                </div>
+                                <div class="ml-4 flex-shrink-0">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                                        High
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Task Item -->
+                        <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input type="checkbox" class="h-4 w-4 text-primary-500 rounded focus:ring-primary-500 border-gray-300 dark:border-gray-600">
+                                </div>
+                                <div class="ml-3 flex-1">
+                                    <p class="text-sm font-medium">Read Chapter 5 of History</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Due tomorrow • History 210</p>
+                                </div>
+                                <div class="ml-4 flex-shrink-0">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                        Medium
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Task Item -->
+                        <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input type="checkbox" class="h-4 w-4 text-primary-500 rounded focus:ring-primary-500 border-gray-300 dark:border-gray-600">
+                                </div>
+                                <div class="ml-3 flex-1">
+                                    <p class="text-sm font-medium">Morning workout</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Daily • Health</p>
+                                </div>
+                                <div class="ml-4 flex-shrink-0">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                        Routine
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 text-right">
+                        <button class="text-primary-500 hover:text-primary-700 dark:hover:text-primary-400 text-sm font-medium">
+                            View all tasks
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects & Assignments Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Projects Section -->
+                <div id="projects" class="animate-fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold">Projects</h2>
+                        <button class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-plus mr-1"></i> New Project
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                        <div class="p-4">
+                            <div class="grid grid-cols-1 gap-4">
+                                <!-- Project Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-md bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                                            <i class="fas fa-project-diagram text-blue-500"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h3 class="text-sm font-medium">Term Paper - History</h3>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Due in 2 weeks • 3 tasks remaining</p>
+                                            <div class="mt-2 w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5">
+                                                <div class="bg-blue-500 h-1.5 rounded-full" style="width: 60%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Project Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-md bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                                            <i class="fas fa-code text-purple-500"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h3 class="text-sm font-medium">CS Capstone Project</h3>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Ongoing • 12 tasks remaining</p>
+                                            <div class="mt-2 w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5">
+                                                <div class="bg-purple-500 h-1.5 rounded-full" style="width: 25%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Assignments Section -->
+                <div id="assignments" class="animate-fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold">Assignments</h2>
+                        <button class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-plus mr-1"></i> New Assignment
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                        <div class="p-4">
+                            <div class="grid grid-cols-1 gap-4">
+                                <!-- Assignment Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-md bg-red-100 dark:bg-red-900 flex items-center justify-center">
+                                            <i class="fas fa-flask text-red-500"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h3 class="text-sm font-medium">Chemistry Lab Report</h3>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Due tomorrow • Chemistry 101</p>
+                                            <div class="mt-2 flex items-center">
+                                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Status:</span>
+                                                <span class="ml-2 text-xs font-medium text-yellow-600 dark:text-yellow-400">In Progress</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Assignment Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-md bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                                            <i class="fas fa-book text-green-500"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h3 class="text-sm font-medium">Literature Essay</h3>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Due in 5 days • English 201</p>
+                                            <div class="mt-2 flex items-center">
+                                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Status:</span>
+                                                <span class="ml-2 text-xs font-medium text-blue-600 dark:text-blue-400">Not Started</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Habits & Exams Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Habits Section -->
+                <div id="habits" class="animate-fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold">Habits</h2>
+                        <button class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-plus mr-1"></i> New Habit
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                        <div class="p-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Habit Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex flex-col items-center">
+                                        <div class="relative w-16 h-16 mb-2">
+                                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                <path
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#e5e7eb"
+                                                    stroke-width="3"
+                                                />
+                                                <path
+                                                    class="progress-ring__circle"
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#10b981"
+                                                    stroke-width="3"
+                                                    stroke-dasharray="85, 100"
+                                                />
+                                            </svg>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-xs font-bold">85%</span>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-sm font-medium text-center">Morning Routine</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">7 day streak</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Habit Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex flex-col items-center">
+                                        <div class="relative w-16 h-16 mb-2">
+                                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                <path
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#e5e7eb"
+                                                    stroke-width="3"
+                                                />
+                                                <path
+                                                    class="progress-ring__circle"
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#3b82f6"
+                                                    stroke-width="3"
+                                                    stroke-dasharray="60, 100"
+                                                />
+                                            </svg>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-xs font-bold">60%</span>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-sm font-medium text-center">Study Session</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">5 day streak</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Habit Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex flex-col items-center">
+                                        <div class="relative w-16 h-16 mb-2">
+                                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                <path
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#e5e7eb"
+                                                    stroke-width="3"
+                                                />
+                                                <path
+                                                    class="progress-ring__circle"
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#f59e0b"
+                                                    stroke-width="3"
+                                                    stroke-dasharray="45, 100"
+                                                />
+                                            </svg>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-xs font-bold">45%</span>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-sm font-medium text-center">Evening Walk</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">3 day streak</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Habit Item -->
+                                <div class="p-3 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 card-hover">
+                                    <div class="flex flex-col items-center">
+                                        <div class="relative w-16 h-16 mb-2">
+                                            <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                <path
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#e5e7eb"
+                                                    stroke-width="3"
+                                                />
+                                                <path
+                                                    class="progress-ring__circle"
+                                                    d="M18 2.0845
+                                                        a 15.9155 15.9155 0 0 1 0 31.831
+                                                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                    fill="none"
+                                                    stroke="#8b5cf6"
+                                                    stroke-width="3"
+                                                    stroke-dasharray="30, 100"
+                                                />
+                                            </svg>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-xs font-bold">30%</span>
+                                            </div>
+                                        </div>
+                                        <h3 class="text-sm font-medium text-center">Meditation</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">New habit</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Exams Section -->
+                <div id="exams" class="animate-fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold">Upcoming Exams</h2>
+                        <button class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            <i class="fas fa-plus mr-1"></i> Add Exam
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                        <div class="p-4">
+                            <!-- Exam Item -->
+                            <div class="mb-4 last:mb-0">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 h-12 w-12 rounded-md bg-red-100 dark:bg-red-900 flex items-center justify-center">
+                                        <i class="fas fa-flask text-red-500 text-xl"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium">Chemistry Midterm</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">May 15, 2023 • 10:00 AM - 12:00 PM</p>
+                                        <div class="mt-2 flex items-center">
+                                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Room:</span>
+                                            <span class="ml-2 text-xs font-medium">B203</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                                            3 days
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Exam Item -->
+                            <div class="mb-4 last:mb-0">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 h-12 w-12 rounded-md bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                                        <i class="fas fa-square-root-alt text-blue-500 text-xl"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium">Math Final</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">May 22, 2023 • 9:00 AM - 11:00 AM</p>
+                                        <div class="mt-2 flex items-center">
+                                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Room:</span>
+                                            <span class="ml-2 text-xs font-medium">A104</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                            10 days
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Exam Item -->
+                            <div class="mb-4 last:mb-0">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 h-12 w-12 rounded-md bg-green-100 dark:bg-green-900 flex items-center justify-center">
+                                        <i class="fas fa-book text-green-500 text-xl"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium">Literature Final</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">May 25, 2023 • 1:00 PM - 3:00 PM</p>
+                                        <div class="mt-2 flex items-center">
+                                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Room:</span>
+                                            <span class="ml-2 text-xs font-medium">C307</span>
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                            13 days
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Mobile sidebar toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const closeMobileMenu = document.getElementById('close-mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileSidebar.classList.remove('hidden');
+            setTimeout(() => {
+                mobileSidebar.querySelector('div').classList.remove('-translate-x-full');
+            }, 10);
+        });
+        
+        closeMobileMenu.addEventListener('click', () => {
+            mobileSidebar.querySelector('div').classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileSidebar.classList.add('hidden');
+            }, 300);
+        });
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('[role="tab"]');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => {
+                    t.classList.remove('tab-active');
+                    t.classList.remove('text-primary-500');
+                    t.classList.add('text-gray-500', 'dark:text-gray-400');
+                });
+                
+                // Add active class to clicked tab
+                tab.classList.add('tab-active', 'text-primary-500');
+                tab.classList.remove('text-gray-500', 'dark:text-gray-400');
+                
+                // Here you would typically show/hide tab panels
+                // For this demo, we're just changing the tab appearance
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileSidebar.classList.contains('hidden')) {
+                        mobileSidebar.querySelector('div').classList.add('-translate-x-full');
+                        setTimeout(() => {
+                            mobileSidebar.classList.add('hidden');
+                        }, 300);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
